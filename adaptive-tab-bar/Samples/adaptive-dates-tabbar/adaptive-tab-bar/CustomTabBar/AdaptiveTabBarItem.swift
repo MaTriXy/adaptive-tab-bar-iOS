@@ -6,49 +6,44 @@
 //  Copyright (c) 2014 Ramotion. All rights reserved.
 //
 
-import UIKit
 import AdaptiveController
+import UIKit
 
-class AdaptiveTabBarItem: UITabBarItem , AdaptiveApperanceProtocol {
+class AdaptiveTabBarItem: UITabBarItem, AdaptiveApperanceProtocol {
     
-    
-    override init(){
-        super.init()
-       
+    func setFontToAdaptiveButton(font: UIFont) {
+        setTitleTextAttributes([NSAttributedStringKey.font : font], for: UIControlState.normal)
     }
-    
-    func setFontToAdaptiveButton(font: UIFont){
-        
-        self.setTitleTextAttributes(NSDictionary(objects: [font], forKeys: [NSFontAttributeName]), forState: UIControlState.Normal)
-       
+
+    func setTitleToAdaptiveButton(text: String) {
+        title = text
     }
-    
-    func setTitleToAdaptiveButton(text: NSString){
-        self.title = text
-    }
-    
-    func setImageToAdaptiveButton(image: UIImage){
+
+    func setImageToAdaptiveButton(image: UIImage?) {
         self.image = image
     }
-    
-    func setSelectedImageToAdaptiveButton(image: UIImage?){
-         self.selectedImage = image
+
+    func setSelectedImageToAdaptiveButton(image: UIImage?) {
+        selectedImage = image
     }
-    
-    func setImageInsetsToAdaptiveButton(insets: UIEdgeInsets){
-          self.imageInsets = insets
+
+    func setImageInsetsToAdaptiveButton(insets: UIEdgeInsets) {
+        imageInsets = insets
     }
-    
-    func setTitleOffsetToAdaptiveButton(offset: UIOffset){
-        self.setTitlePositionAdjustment(offset)
+
+    func setTitleOffsetToAdaptiveButton(offset: UIOffset) {
+        titlePositionAdjustment = offset
     }
-    
-    func setTitleColorToAdaptiveButton(color: UIColor){
-      var dictionary = self.titleTextAttributesForState(UIControlState.Normal)
-        dictionary.updateValue(color, forKey: NSForegroundColorAttributeName)
-      self.setTitleTextAttributes(dictionary, forState: UIControlState.Normal)
+
+    func setTitleColorToAdaptiveButton(color: UIColor) {
+        let dictionary = titleTextAttributes(for: UIControlState.normal)
+        
+        var attributes: [NSAttributedStringKey: Any] = [:]
+        dictionary?.forEach { key, value in
+            attributes[NSAttributedStringKey(key)] = value
+        }
+        
+        attributes[NSAttributedStringKey.foregroundColor] = color
+        setTitleTextAttributes(attributes, for: UIControlState.normal)
     }
-   
-    
-    
 }

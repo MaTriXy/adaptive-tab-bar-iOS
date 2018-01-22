@@ -12,43 +12,32 @@ public let kSmallTitleAdaptiveState = "kImageAdaptiveState"
 public let kImageAdaptiveState = "kNormalImageAdaptiveState"
 
 public class AdaptiveDateState: AdaptiveState {
-   
-    
-    public override init(){
+
+    public override init() {
         super.init()
-        super.addNewCustomAdaptiveStates([kSmallTitleAdaptiveState,kImageAdaptiveState])
+        super.addNewCustomAdaptiveStates(customAdaptiveStates: [kSmallTitleAdaptiveState, kImageAdaptiveState])
     }
-    
-   public convenience init(installDate:NSDate, currentDate:NSDate,countDaysToSmallTextState:Int,countDaysToImageState:Int) {
+
+    public convenience init(installDate: Date, currentDate: Date, countDaysToSmallTextState: Int, countDaysToImageState: Int) {
         self.init()
-        
-        var remainsDays = self.daysBetweenDates(installDate,currentDate: currentDate)
-        self.currentItemState =  self.stateRemainDays(remainsDays,countDaysToSmallTextState:countDaysToSmallTextState,countDaysToImageState:countDaysToImageState)
-        print(currentItemState)
+
+        let remainsDays = daysBetweenDates(installDate: installDate, currentDate: currentDate)
+        currentItemState = stateRemainDays(remainDays: remainsDays, countDaysToSmallTextState: countDaysToSmallTextState, countDaysToImageState: countDaysToImageState)
     }
-    
-    
-     func daysBetweenDates(installDate:NSDate, currentDate:NSDate) -> Int{
-        
-        let cal = NSCalendar.currentCalendar()
-        
-        let unit:NSCalendarUnit = .DayCalendarUnit
-        
-        let components = cal.components(unit, fromDate: installDate, toDate: currentDate, options: nil)
-        
-        return components.day+1;
+
+    func daysBetweenDates(installDate: Date, currentDate: Date) -> Int {
+        let units = Set<Calendar.Component>([.day])
+        let components = NSCalendar.current.dateComponents(units, from: installDate, to: currentDate)
+        return (components.day ?? 0) + 1
     }
-    
-     func stateRemainDays (remainDays:Int,countDaysToSmallTextState:Int,countDaysToImageState:Int)->String{
-        
-        var mode:String = kDefaultAdaptiveState
-        print(" DAYS \(remainDays) ")
-        if remainDays > countDaysToSmallTextState && remainDays < countDaysToImageState{
+
+    func stateRemainDays(remainDays: Int, countDaysToSmallTextState: Int, countDaysToImageState: Int) -> String {
+        var mode: String = kDefaultAdaptiveState
+        if remainDays > countDaysToSmallTextState && remainDays < countDaysToImageState {
             mode = kSmallTitleAdaptiveState
-        }else if remainDays > countDaysToImageState {
+        } else if remainDays > countDaysToImageState {
             mode = kImageAdaptiveState
         }
-        print(mode)
         return mode
     }
 }
